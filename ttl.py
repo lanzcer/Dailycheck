@@ -12,6 +12,7 @@ import os
 import sys
 import json
 import re
+import time
 
 import requests
 from sendNotify import send
@@ -162,6 +163,7 @@ if __name__ == '__main__':
     msgs = ttl.main(tokens)
     for m in msgs:
         msg += "\n"+m
+    msg += "\n"+"时间："+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     send("太太乐通知",msg)
 
 
