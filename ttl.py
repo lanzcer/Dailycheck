@@ -7,7 +7,6 @@ new Env('太太乐餐饮');
 首次注册必须先登录一次小程序绑定微信然后再获取token不会抓包的小白使用api接口获取token
 https://www.ttljf.com/ttl_site/user.do?username=手机号码&password=密码&device_brand=apple&device_model=iPhone11,8&device_uuid=&device_version=13.5&mthd=login&platform=ios&sign="
 复制链接浏览器打开，换成自己账户密码，
-多个请用@隔开，且@前后不能有空格，如：***@***@***"
 """
 import os
 import sys
@@ -45,7 +44,7 @@ def get_token():
     for i in range(len(json.loads(response.text)['data'])):
         if json.loads(response.text)['data'][i]['name'] =='ttlhd':
             try:
-                token = json.loads(response.text)['data'][i]['value'].split('@')
+                token = json.loads(response.text)['data'][i]['value'].split('&')
                 tokens.extend(token)
             except:
                 pass
@@ -131,7 +130,6 @@ class Ttl:
             msg.append(item["giftName"]+ "  库存为："+str(item["giftCount"])+ "  所需积分："+str(item["price"]))
         return msg
 
-
     def main(self,tokens):
         msg = []
         msg_0 = []
@@ -142,18 +140,16 @@ class Ttl:
         print(announce)
         msg_1 = self.repertory()
         for token in tokens:
-            try:
-                print("-----------------------------------------")
-                print(f"\n执行第{i}个账号任务")
-                self.task(token)
-                a = self.info(token)
-                msg_0.append(f"第{i}个账号"+ a[0])
-                i += 1
-            except:
-                print("请检查环境变量之间是否空格")
+            print("-----------------------------------------")
+            print(f"\n执行第{i}个账号任务")
+            self.task(token)
+            a = self.info(token)
+            msg_0.append(f"第{i}个账号"+ a[0])
+            i += 1
         print("\n任务执行完毕！")
         msg = msg_0 + msg_1
         return msg
+
 
 if __name__ == '__main__':
     msg = ''
