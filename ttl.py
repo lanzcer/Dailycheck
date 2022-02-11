@@ -140,12 +140,16 @@ class Ttl:
         print(announce)
         msg_1 = self.repertory()
         for token in tokens:
-            print("-----------------------------------------")
-            print(f"\n执行第{i}个账号任务")
-            self.task(token)
-            a = self.info(token)
-            msg_0.append(f"第{i}个账号"+ a[0])
-            i += 1
+            try:
+                print("-----------------------------------------")
+                print(f"\n执行第{i}个账号任务")
+                self.task(token)
+                a = self.info(token)
+                msg_0.append(f"第{i}个账号"+ a[0])
+                i += 1
+            except:
+                print("请检查token前后是否有空格")
+                i += 1
         print("\n任务执行完毕！")
         msg = msg_0 + msg_1
         return msg
