@@ -84,9 +84,6 @@ class Ttl:
         else:
             print(f"签到任务：{res['message']}")
 
-    
-    
-
     def info(self,token):
         msg = []
         url = 'https://www.ttljf.com/ttl_chefHub/'
@@ -155,12 +152,8 @@ class Ttl:
             except:
                 print("请检查环境变量之间是否空格")
         print("\n任务执行完毕！")
-    
-
         msg = msg_0 + msg_1
         return msg
-
-
 
 if __name__ == '__main__':
     msg = ''
