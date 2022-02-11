@@ -129,7 +129,7 @@ class Ttl:
         data = json.loads(response.text)
         giftlist = data.get('gifts')
         for item in giftlist:
-            print("=====================📣系统通知📣=====================")
+            print("=============📣系统通知📣=============")
             print(item["giftName"]+ "  库存为："+str(item["giftCount"])+ "  所需积分："+str(item["price"]))
             msg.append(item["giftName"]+ "  库存为："+str(item["giftCount"])+ "  所需积分："+str(item["price"]))
         return msg
@@ -146,15 +146,15 @@ class Ttl:
         msg_1 = self.repertory()
         for token in tokens:
             try:
-                print("--------------------------------------------------------")
+                print("-----------------------------------------")
                 print(f"\n执行第{i}个账号任务")
                 self.task(token)
                 a = self.info(token)
                 msg_0.append(f"第{i}个账号"+ a[0])
                 i += 1
-                print("\n任务执行完毕！")
             except:
                 print("请检查环境变量之间是否空格")
+        print("\n任务执行完毕！")
     
 
         msg = msg_0 + msg_1
