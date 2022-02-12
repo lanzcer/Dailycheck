@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-cron: 0 0 */4 * * ?
+cron: 36 13 * * *
 new Env('太太乐餐饮');
 本脚本支持新版青龙环境变量，变量名：ttlhd，支持青龙推送消息
 微信搜索太太乐餐饮注册登录，下载太太乐app兑换话费及其他实物
@@ -32,8 +32,10 @@ def load_send():
         printf("加载通知服务失败~")
 load_send()
 
-def get_token():
+#获取变量token，userid
+def get_token_userid():
     tokens = []
+    users = []
     url='http://127.0.0.1:5600/api/envs'
     with open('/ql/config/auth.json', 'r') as f:
         token=json.loads(f.read())['token']
@@ -45,11 +47,17 @@ def get_token():
     for i in range(len(json.loads(response.text)['data'])):
         if json.loads(response.text)['data'][i]['name'] =='ttlhd':
             try:
-                token = json.loads(response.text)['data'][i]['value'].split('&')
-                tokens.extend(token)
+                env = re.split("&|@|\\s",json.loads(response.text)['data'][i]['value'])
+                for item in env:
+                    if item == '':
+                        pass
+                    elif len(item) <=8:
+                        users.append(item)
+                    else:
+                        tokens.append(item)
             except:
                 pass
-    return tokens
+    return tokens, users
 
 
 class Ttl:
@@ -112,7 +120,7 @@ class Ttl:
     #商品库存
     def repertory(self):
         msg = []
-        url = 'https://www.ttljf.com/ttl_site/giftApi.do?giftCategoryId=7&mthd=searchGift&pageNo=1&pageSize=10&sign=ba06bb1cc4ec3e6518e29ca17599b356'
+        url = 'https://www.ttljf.com/ttl_site/giftApi.do?giftCategoryId=7&mthd=searchGift&pageNo=1&pageSize=10&sign='
         headers = {
             'Host': 'www.ttljf.com',
             'Accept': '*/*',
@@ -158,12 +166,12 @@ class Ttl:
 
 if __name__ == '__main__':
     msg = ''
-    tokens = get_token()
+    tokens = get_token_userid()[0]
     ttl = Ttl(tokens)
     msgs = ttl.main(tokens)
     for m in msgs:
         msg += "\n"+m
-    msg += "\n"+"时间："+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
+    msg += "\n"+"时间："+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
     send("太太乐通知",msg)
 
 
