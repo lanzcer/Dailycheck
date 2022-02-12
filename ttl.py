@@ -163,7 +163,7 @@ if __name__ == '__main__':
     msgs = ttl.main(tokens)
     for m in msgs:
         msg += "\n"+m
-    msg += "\n"+"时间："+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
+    msg += "\n"+"时间："+time.strftime('%Y-%m-%d %H:%M:%S',time.localtime())
     send("太太乐通知",msg)
 
 
