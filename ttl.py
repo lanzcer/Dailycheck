@@ -47,7 +47,7 @@ def get_token_userid():
     for i in range(len(json.loads(response.text)['data'])):
         if json.loads(response.text)['data'][i]['name'] =='ttlhd':
             try:
-                env = re.split("&|@|\\s",json.loads(response.text)['data'][i]['value'])
+                env = re.split("&|,|，|\\s",json.loads(response.text)['data'][i]['value'])
                 for item in env:
                     if item == '':
                         pass
@@ -58,7 +58,6 @@ def get_token_userid():
             except:
                 pass
     return tokens, users
-
 
 class Ttl:
     def __init__(self,tokens):
@@ -120,7 +119,7 @@ class Ttl:
     #商品库存
     def repertory(self):
         msg = []
-        url = 'https://www.ttljf.com/ttl_site/giftApi.do?giftCategoryId=7&mthd=searchGift&pageNo=1&pageSize=10&sign='
+        url = 'https://www.ttljf.com/ttl_site/giftApi.do?giftCategoryId=7&mthd=searchGift&pageNo=1&pageSize=10&sign=ba06bb1cc4ec3e6518e29ca17599b356'
         headers = {
             'Host': 'www.ttljf.com',
             'Accept': '*/*',
@@ -166,7 +165,7 @@ class Ttl:
 
 if __name__ == '__main__':
     msg = ''
-    tokens = get_token_userid()[0]
+    tokens = get_token()[0]
     ttl = Ttl(tokens)
     msgs = ttl.main(tokens)
     for m in msgs:
