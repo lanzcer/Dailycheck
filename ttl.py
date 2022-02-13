@@ -165,7 +165,7 @@ class Ttl:
 
 if __name__ == '__main__':
     msg = ''
-    tokens = get_token()[0]
+    tokens = get_token_userid()[0]
     ttl = Ttl(tokens)
     msgs = ttl.main(tokens)
     for m in msgs:
