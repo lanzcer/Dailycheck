@@ -7,6 +7,9 @@ new Env('太太乐话费库存监控、兑换');，
 如需自动兑换话费，需要token和userId
 填写方式如:aaaa-bbbb-cccc-dddd-eeee,111111
 多账号用&连接或者另加同名变量
+接口:https://www.ttljf.com/ttl_site/user.do?username=账号&password=密码&device_brand=apple&device_model=iPhone11,8&device_uuid=&device_version=13.5&mthd=login&platform=ios&sign=
+如脚本报{"killed":false,"code":1,"signal":null,"cmd":"kill -9 3","stdout":"","stderr":"sh: can't kill pid 3: No such process"}
+修改服务器/etc/systemd/logind.conf文件，将KillUserProcesses=no前面的//删除
 """
 import os
 import sys
@@ -75,7 +78,7 @@ def giftInven():
         'Connection': 'keep-alive'
         }
     while flag == False:
-        if k < 100:
+        if k < 150:
             response = requests.get(url, headers=headers)
             for i in range(len(json.loads(response.text)['gifts'])):
                 if json.loads(response.text)['gifts'][i]['stockAmount'] != 0:
@@ -244,6 +247,8 @@ class Buygift:
 
 
 if __name__ == '__main__':
+    print("必须变量token,userId,在接口处都可获得，填写方式见脚本注释")
+    print("----------太太乐话费库存监控开始----------")
     signal = giftInven()
     if signal == 1:
         buygift = Buygift(signal)
