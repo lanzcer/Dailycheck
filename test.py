@@ -253,7 +253,7 @@ class Buygift:
             except:
                 pass
         print("自动兑换结束，请登录太太乐app查看")
-        return 
+        return msg_all
 
 
 if __name__ == '__main__':
