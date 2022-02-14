@@ -17,7 +17,7 @@ import re
 import time
 
 import requests
-from Seeyou66_ttl_ssendnotice import send
+from Seeyou66_ttl_sendnotice import send
 
 def load_send():
     global send
