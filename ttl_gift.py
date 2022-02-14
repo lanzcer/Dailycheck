@@ -2,7 +2,6 @@
 """
 cron: 0 0/30 * * * ?
 new Env('太太乐话费库存监控、兑换');，
-不成熟脚本，有待测试
 本脚本支持新版青龙环境变量ttlhd，支持青龙推送消息
 如需自动兑换话费，需要token和userId
 填写方式如:aaaa-bbbb-cccc-dddd-eeee,111111
