@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """
 cron: 0 0/30 * * * ?
-new Env('太太乐话费库存监控、兑换');，
-本脚本支持新版青龙环境变量ttlhd，支持青龙推送消息
+new Env('test太太乐测试test');，
 如需自动兑换话费，需要token和userId
 填写方式如:aaaa-bbbb-cccc-dddd-eeee,111111
 多账号用&连接或者另加同名变量
 接口:https://www.ttljf.com/ttl_site/user.do?username=账号&password=密码&device_brand=apple&device_model=iPhone11,8&device_uuid=&device_version=13.5&mthd=login&platform=ios&sign=
+
 如脚本报{"killed":false,"code":1,"signal":null,"cmd":"kill -9 3","stdout":"","stderr":"sh: can't kill pid 3: No such process"}
 修改服务器/etc/systemd/logind.conf文件，将KillUserProcesses=no前面的//删除
 """
@@ -16,7 +16,6 @@ import json
 import re
 import time
 
-import requests
 import requests
 from sendnotice import send
 
@@ -139,7 +138,7 @@ class Buygift:
     def identify_num(self,phone_number):
         China_Tele = ['133','149','153','173','177','180','181','189','199']
         China_Unic = ['130','131','132','145','155','156','166','171','175','176','185','186']
-        China_Mobi = ['134','135','136','137','138','139','147','150','151','152','157','158','159','178','182','183','184','187','188','198']
+        China_Mobi = ['134','135','136','137','138','139','147','150','151','152','157','158','159','178','182','183','184','187','188','195','198']
         if phone_number[0:3] in China_Tele:
             return 1
         elif phone_number[0:3] in China_Unic:
@@ -221,49 +220,49 @@ class Buygift:
             nums.append(self.get_phone(token))
         for i in range(len(tokens)):
             if nums[i] == '':
-                print(f"账号{i}token失效")
-                s = '账号'+str(i)+'token失效'
+                print(f"账号{i+1}token失效")
+                s = '账号'+str(i+1)+'token失效'
                 msg_all += s
             elif self.identify_num(nums[i]) == 1:
                 code = self.gift633(tokens[i],users[i])[0]
                 msg = self.gift633(tokens[i],users[i])[1]
                 if code == '0000':
-                    print(f"{nums[i]}兑换10元话费成功")
                     a = '手机号：'+str(nums[i])+',兑换10元话费成功'+'\n'
+                    print(a)
                 else:
-                    print(f"{nums[i]}兑换10元话费失败")
                     a = '手机号：'+str(nums[i])+',兑换10元话费失败,原因：'+msg+'\n'
+                    print(a)
                 msg_all += a
             elif self.identify_num(nums[i]) == 2:
                 code_1 = self.gift62(tokens[i],users[i])[0]
                 msg_1 = self.gift62(tokens[i],users[i])[1]
                 if code_1 == '0000':
-                    print(f"{nums[i]}兑换5元话费成功")
                     b = '手机号：'+str(nums[i])+',兑换5元话费成功'+'\n'
+                    print(b)
                 else:
-                    print(f"{nums[i]}兑换5元话费失败")
                     b = '手机号：'+str(nums[i])+',兑换5元话费失败,原因：'+msg_1+'\n'
+                    print(b)
                 msg_all += b
                 code_2 = self.gift61(tokens[i],users[i])[0]
                 msg_2 = self.gift61(tokens[i],users[i])[1]                
                 if code_1 == '0000':
-                    print(f"{nums[i]}兑换2元话费成功")
                     c = '手机号：'+str(nums[i])+',兑换2元话费成功'
+                    print(c)
                 else:
-                    print(f"{nums[i]}兑换2元话费失败")
                     c = '手机号：'+str(nums[i])+',兑换2元话费失败,原因：'+msg_2+'\n'
+                    print(c)
                 msg_all += c
             elif self.identify_num(nums[i]) == 3:
                 code_3 = self.gift631(tokens[i],users[i])[0]
                 msg_3 = self.gift631(tokens[i],users[i])[1]                  
                 if code_3 == '0000':
-                    print(f"{nums[i]}兑换30元话费成功")
                     d = '手机号：'+str(nums[i])+',兑换30元话费成功'+'\n'
+                    print(d)
                 else:
-                    print(f"{nums[i]}兑换30元话费失败")
                     d = '手机号：'+str(nums[i])+',兑换30元话费失败,原因：'+msg_3+'\n'
+                    print(d)
                 msg_all += d
-                print("自动兑换结束，请登录太太乐app查看")
+        print("自动兑换结束，请登录太太乐app查看")
         return msg_all
 
 
@@ -277,5 +276,3 @@ if __name__ == '__main__':
         buygift = Buygift(signal)
         message = buygift.main()
         send("太太乐话费兑换通知",message)
-
-
