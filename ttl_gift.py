@@ -84,7 +84,6 @@ def giftInven():
                 if json.loads(response.text)['gifts'][i]['stockAmount'] != 0:
                     giftname = json.loads(response.text)['gifts'][i]['giftName']
                     stockamount = json.loads(response.text)['gifts'][i]['stockAmount']
-                    send("太太乐话费上货通知","正在尝试自动兑换")
                     return 1
                 elif json.loads(response.text)['gifts'][i]['stockAmount'] == 0:
                     giftname = json.loads(response.text)['gifts'][i]['giftName']
@@ -95,12 +94,31 @@ def giftInven():
         else:
             flag = True
 
+def stock():
+    msg = ''
+    url = 'https://www.ttljf.com/ttl_site/giftApi.do?giftCategoryId=7&mthd=searchGift&pageNo=1&pageSize=10&sign='
+    headers = {
+        'Host': 'www.ttljf.com',
+        'Accept': '*/*',
+        'User-Agent': 'Totole/1.4.8 (iPhone; iOS 15.3; Scale/3.00)',
+        'Accept-Language': 'zh-Hans-CN;q=1',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive'
+        }
+    response = requests.get(url, headers=headers)
+    for i in range(len(json.loads(response.text)['gifts'])):
+        giftname = json.loads(response.text)['gifts'][i]['giftName']
+        stockamount = json.loads(response.text)['gifts'][i]['stockAmount']
+        msg += giftname+'剩余库存：'+str(stockamount)+'\n'
+    return msg
+
 
 class Buygift:
     def __init__(self,signal):
         self.signal = signal
     #获取token对应手机号码
     def get_phone(self,token):
+        nums = []
         url = 'https://www.ttljf.com/ttl_chefHub/'
         headers ={
             'Host': 'www.ttljf.com',
@@ -114,9 +132,9 @@ class Buygift:
             }
         response = requests.get(url+'user/api/my', headers=headers)
         if json.loads(response.text)['code'] == 0:
-            return (json.loads(response.text)['data']['mobile'])
+            nums.append(json.loads(response.text)['data']['mobile'])
         else:
-            return ""
+            nums.append('')
 
     #识别手机号码运营商
     def identify_num(self,phone_number):
@@ -203,7 +221,8 @@ class Buygift:
         for token in tokens:
             nums.append(self.get_phone())
         for i in range(len(tokens)):
-            if self.identify_num(nums[i]) == 1:
+            if
+            elif self.identify_num(nums[i]) == 1:
                 code = self.gift633(tokens[i],users[i])[0]
                 msg = self.gift633(tokens[i],users[i])[1]
                 if code == '0000':
@@ -251,6 +270,10 @@ if __name__ == '__main__':
     print("----------太太乐话费库存监控开始----------")
     signal = giftInven()
     if signal == 1:
+        msg = stock()
+        send("太太乐库存通知",msg)
         buygift = Buygift(signal)
         message = buygift.main()
         send("太太乐话费兑换通知",message)
+
+
