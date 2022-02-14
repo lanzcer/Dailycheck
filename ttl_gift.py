@@ -219,7 +219,7 @@ class Buygift:
         tokens = get_token_userid()[0]
         users = get_token_userid()[1]
         for token in tokens:
-            nums.append(self.get_phone())
+            nums.append(self.get_phone(token))
         for i in range(len(tokens)):
             if nums[i] == '':
                 print(f"账号{i}token失效")
