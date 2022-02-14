@@ -132,7 +132,7 @@ class Buygift:
             }
         response = requests.get(url+'user/api/my', headers=headers)
         if json.loads(response.text)['code'] == 0:
-            return (json.loads(response.text)['data']['mobile'])
+            return json.loads(response.text)['data']['mobile']
         else:
             return ""
 
