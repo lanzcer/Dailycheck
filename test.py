@@ -198,7 +198,6 @@ class Buygift:
         }
         response = requests.get(url, headers=headers)
         return json.loads(response.text)['code'], json.loads(response.text)['message']
-
     def main(self):
         nums = []
         msg_all = ''
@@ -207,51 +206,54 @@ class Buygift:
         for token in tokens:
             nums.append(self.get_phone(token))
         for i in range(len(tokens)):
-            if nums[i] == '':
-                print(f"账号{i}token失效")
-                s = '账号'+str(i)+'token失效'
-                msg_all += s
-            elif self.identify_num(nums[i]) == 1:
-                code = self.gift633(tokens[i],users[i])[0]
-                msg = self.gift633(tokens[i],users[i])[1]
-                if code == '0000':
-                    print(f"{nums[i]}兑换10元话费成功")
-                    a = '手机号：'+str(nums[i])+',兑换10元话费成功'+'\n'
-                else:
-                    print(f"{nums[i]}兑换10元话费失败")
-                    a = '手机号：'+str(nums[i])+',兑换10元话费失败,原因：'+msg+'\n'
-                msg_all += a
-            elif self.identify_num(nums[i]) == 2:
-                code_1 = self.gift62(tokens[i],users[i])[0]
-                msg_1 = self.gift62(tokens[i],users[i])[1]
-                if code_1 == '0000':
-                    print(f"{nums[i]}兑换5元话费成功")
-                    b = '手机号：'+str(nums[i])+',兑换5元话费成功'+'\n'
-                else:
-                    print(f"{nums[i]}兑换5元话费失败")
-                    b = '手机号：'+str(nums[i])+',兑换5元话费失败,原因：'+msg_1+'\n'
-                msg_all += b
-                code_2 = self.gift61(tokens[i],users[i])[0]
-                msg_2 = self.gift61(tokens[i],users[i])[1]                
-                if code_1 == '0000':
-                    print(f"{nums[i]}兑换2元话费成功")
-                    c = '手机号：'+str(nums[i])+',兑换2元话费成功'
-                else:
-                    print(f"{nums[i]}兑换2元话费失败")
-                    c = '手机号：'+str(nums[i])+',兑换2元话费失败,原因：'+msg_2+'\n'
-                msg_all += c
-            elif self.identify_num(nums[i]) == 3:
-                code_3 = self.gift631(tokens[i],users[i])[0]
-                msg_3 = self.gift631(tokens[i],users[i])[1]                  
-                if code_3 == '0000':
-                    print(f"{nums[i]}兑换30元话费成功")
-                    d = '手机号：'+str(nums[i])+',兑换30元话费成功'+'\n'
-                else:
-                    print(f"{nums[i]}兑换30元话费失败")
-                    d = '手机号：'+str(nums[i])+',兑换30元话费失败,原因：'+msg_3+'\n'
+            try:
+                if nums[i] == '':
+                    print(f"账号{i+1}token失效")
+                    s = '账号'+str(i+1)+'token失效'
+                    msg_all += s
+                elif self.identify_num(nums[i]) == 1:
+                    code = self.gift633(tokens[i],users[i])[0]
+                    msg = self.gift633(tokens[i],users[i])[1]
+                    if code == '0000':
+                        a = '手机号：'+str(nums[i])+',兑换10元话费成功'+'\n'
+                        print(a)
+                    else:
+                        a = '手机号：'+str(nums[i])+',兑换10元话费失败,原因：'+msg+'\n'
+                        print(a)
+                        msg_all += a
+                elif self.identify_num(nums[i]) == 2:
+                    code_1 = self.gift62(tokens[i],users[i])[0]
+                    msg_1 = self.gift62(tokens[i],users[i])[1]
+                    if code_1 == '0000':
+                        b = '手机号：'+str(nums[i])+',兑换5元话费成功'+'\n'
+                        print(b)
+                    else:
+                        b = '手机号：'+str(nums[i])+',兑换5元话费失败,原因：'+msg_1+'\n'
+                        print(b)
+                        msg_all += b
+                        code_2 = self.gift61(tokens[i],users[i])[0]
+                        msg_2 = self.gift61(tokens[i],users[i])[1]                
+                    if code_1 == '0000':
+                        c = '手机号：'+str(nums[i])+',兑换2元话费成功'
+                        print(c)
+                    else:
+                        c = '手机号：'+str(nums[i])+',兑换2元话费失败,原因：'+msg_2+'\n'
+                        print(c)
+                        msg_all += c
+                elif self.identify_num(nums[i]) == 3:
+                    code_3 = self.gift631(tokens[i],users[i])[0]
+                    msg_3 = self.gift631(tokens[i],users[i])[1]                  
+                    if code_3 == '0000':
+                        d = '手机号：'+str(nums[i])+',兑换30元话费成功'+'\n'
+                        print(d)
+                    else:
+                        d = '手机号：'+str(nums[i])+',兑换30元话费失败,原因：'+msg_3+'\n'
+                        print(d)
                 msg_all += d
-                print("自动兑换结束，请登录太太乐app查看")
-        return msg_all
+            except:
+                pass
+        print("自动兑换结束，请登录太太乐app查看")
+        return 
 
 
 if __name__ == '__main__':
