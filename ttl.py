@@ -26,10 +26,10 @@ def load_send():
             from sendNotify import send
         except:
             send=False
-            printf("加载通知服务失败~")
+            print("加载通知服务失败~")
     else:
         send=False
-        printf("加载通知服务失败~")
+        print("加载通知服务失败~")
 load_send()
 
 #获取变量token，userid
