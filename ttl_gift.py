@@ -221,7 +221,10 @@ class Buygift:
         for token in tokens:
             nums.append(self.get_phone())
         for i in range(len(tokens)):
-            if
+            if nums=[i] == '':
+                print(f"账号{i}token失效")
+                s = '账号'+str(i)+'token失效'
+                msg_all += s
             elif self.identify_num(nums[i]) == 1:
                 code = self.gift633(tokens[i],users[i])[0]
                 msg = self.gift633(tokens[i],users[i])[1]
