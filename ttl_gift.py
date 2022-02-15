@@ -17,22 +17,10 @@ import re
 import time
 
 import requests
-from sendnotice import send
-
-def load_send():
-    global send
-    cur_path = os.path.abspath(os.path.dirname(__file__))
-    sys.path.append(cur_path)
-    if os.path.exists(cur_path + "/sendnotice.py"):
-        try:
-            from sendnotice import send
-        except:
-            send=False
-            print("加载通知服务失败~")
-    else:
-        send=False
-        print("加载通知服务失败~")
-load_send()
+try:
+    from sendnotice import send
+except:
+    from Seeyou66_ttl_sendnotice import send
 
 
 #获取变量token，userid
