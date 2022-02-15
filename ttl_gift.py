@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 cron: 0 0/30 * * * ?
-new Env('太太乐话费库存监控,兑换');，
+new Env('test太太乐测试test');，
 如需自动兑换话费，需要token和userId
 填写方式如:aaaa-bbbb-cccc-dddd-eeee,111111
 多账号用&连接或者另加同名变量
 接口:https://www.ttljf.com/ttl_site/user.do?username=账号&password=密码&device_brand=apple&device_model=iPhone11,8&device_uuid=&device_version=13.5&mthd=login&platform=ios&sign=
-
 如脚本报{"killed":false,"code":1,"signal":null,"cmd":"kill -9 3","stdout":"","stderr":"sh: can't kill pid 3: No such process"}
 修改服务器/etc/systemd/logind.conf文件，将KillUserProcesses=no前面的//删除
 """
@@ -21,7 +20,6 @@ try:
     from sendnotice import send
 except:
     from Seeyou66_ttl_sendnotice import send
-
 
 #获取变量token，userid
 def get_token_userid():
@@ -134,10 +132,11 @@ class Buygift:
         elif phone_number[0:3] in China_Mobi:
             return 3
 
-    def gift61(self,token,user):
-        url= 'https://www.ttljf.com/ttl_site/giftApi.do?gifts=61%3A1&loginToken=&mthd=buyGift&sign=&totalprice=3&userId='
+    def gift61(self,token,user,num):
+        url= 'https://www.ttljf.com/ttl_site/chargeApi.do?giftId=61&loginToken=&method=charge&mobile=&sign=&userId='
         url = list(url+user)
-        url.insert(66, token)
+        url.insert(65,token)
+        url.insert(88,num)
         url = ''.join(url)
         headers ={
             'Host': 'www.ttljf.com',
@@ -150,10 +149,11 @@ class Buygift:
         response = requests.get(url, headers=headers)
         return json.loads(response.text)['code'], json.loads(response.text)['message']
 
-    def gift62(self,token,user):
-        url= 'https://www.ttljf.com/ttl_site/giftApi.do?gifts=62%3A1&loginToken=&mthd=buyGift&sign=&totalprice=7&userId='
+    def gift62(self,token,user,num):
+        url= 'https://www.ttljf.com/ttl_site/chargeApi.do?giftId=62&loginToken=&method=charge&mobile=&sign=&userId='
         url = list(url+user)
-        url.insert(66, token)
+        url.insert(65,token)
+        url.insert(88,num)
         url = ''.join(url)
         headers ={
             'Host': 'www.ttljf.com',
@@ -166,10 +166,11 @@ class Buygift:
         response = requests.get(url, headers=headers)
         return json.loads(response.text)['code'], json.loads(response.text)['message']
 
-    def gift633(self,token,user):
-        url= 'https://www.ttljf.com/ttl_site/giftApi.do?gifts=633%3A1&loginToken=&mthd=buyGift&sign=&totalprice=45&userId='
+    def gift633(self,token,user,num):
+        url= 'https://www.ttljf.com/ttl_site/chargeApi.do?giftId=633&loginToken=&method=charge&mobile=&sign=&userId='
         url = list(url+user)
-        url.insert(67, token)
+        url.insert(66,token)
+        url.insert(89,num)
         url = ''.join(url)
         headers ={
             'Host': 'www.ttljf.com',
@@ -183,10 +184,11 @@ class Buygift:
         return json.loads(response.text)['code'], json.loads(response.text)['message']
 
 
-    def gift631(self,token,user):
-        url= 'https://www.ttljf.com/ttl_site/giftApi.do?gifts=631%3A1&loginToken=&mthd=buyGift&sign=&totalprice=15&userId='
+    def gift631(self,token,user,num):
+        url= 'https://www.ttljf.com/ttl_site/chargeApi.do?giftId=631&loginToken=&method=charge&mobile=&sign=&userId='
         url = list(url+user)
-        url.insert(67, token)
+        url.insert(66,token)
+        url.insert(89,num)
         url = ''.join(url)
         headers ={
             'Host': 'www.ttljf.com',
@@ -209,12 +211,12 @@ class Buygift:
         for i in range(len(tokens)):
             try:
                 if nums[i] == '':
-                    print(f"账号{i+1}token失效")
-                    s = '账号'+str(i+1)+'token失效'
+                    s = '手机号:'+nums[i]+'token失效'
+                    print(s)
                     msg_all += s
                 elif self.identify_num(nums[i]) == 1:
-                    code = self.gift633(tokens[i],users[i])[0]
-                    msg = self.gift633(tokens[i],users[i])[1]
+                    code = self.gift633(tokens[i],users[i],nums[i])[0]
+                    msg = self.gift633(tokens[i],users[i],nums[i])[1]
                     if code == '0000':
                         a = '手机号：'+str(nums[i])+',兑换10元话费成功'+'\n'
                         print(a)
@@ -223,8 +225,8 @@ class Buygift:
                         print(a)
                         msg_all += a
                 elif self.identify_num(nums[i]) == 2:
-                    code_1 = self.gift62(tokens[i],users[i])[0]
-                    msg_1 = self.gift62(tokens[i],users[i])[1]
+                    code_1 = self.gift62(tokens[i],users[i],nums[i])[0]
+                    msg_1 = self.gift62(tokens[i],users[i],nums[i])[1]
                     if code_1 == '0000':
                         b = '手机号：'+str(nums[i])+',兑换5元话费成功'+'\n'
                         print(b)
@@ -232,8 +234,8 @@ class Buygift:
                         b = '手机号：'+str(nums[i])+',兑换5元话费失败,原因：'+msg_1+'\n'
                         print(b)
                         msg_all += b
-                        code_2 = self.gift61(tokens[i],users[i])[0]
-                        msg_2 = self.gift61(tokens[i],users[i])[1]                
+                        code_2 = self.gift61(tokens[i],users[i],nums[i])[0]
+                        msg_2 = self.gift61(tokens[i],users[i],nums[i])[1]                
                     if code_1 == '0000':
                         c = '手机号：'+str(nums[i])+',兑换2元话费成功'
                         print(c)
@@ -242,8 +244,8 @@ class Buygift:
                         print(c)
                         msg_all += c
                 elif self.identify_num(nums[i]) == 3:
-                    code_3 = self.gift631(tokens[i],users[i])[0]
-                    msg_3 = self.gift631(tokens[i],users[i])[1]                  
+                    code_3 = self.gift631(tokens[i],users[i],nums[i])[0]
+                    msg_3 = self.gift631(tokens[i],users[i],nums[i])[1]                  
                     if code_3 == '0000':
                         d = '手机号：'+str(nums[i])+',兑换30元话费成功'+'\n'
                         print(d)
@@ -267,3 +269,5 @@ if __name__ == '__main__':
         buygift = Buygift(signal)
         message = buygift.main()
         send("太太乐话费兑换通知",message)
+
+
