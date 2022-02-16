@@ -314,12 +314,15 @@ class Buygift:
 if __name__ == '__main__':
     print("必须变量token,userId,在接口处都可获得，填写方式见脚本注释")
     print("----------太太乐话费库存监控开始----------")
+    i = 0
     signal = giftInven()
     if signal == 1:
         msg = stock()
         send("太太乐库存通知",msg)
-        buygift = Buygift(signal)
-        message = buygift.main()
-        send("太太乐话费兑换通知",message)
+        while i <=3:
+            buygift = Buygift(signal)
+            message = buygift.main()
+            send("太太乐话费兑换通知",message)
+            i += 1 
 
 
