@@ -307,6 +307,7 @@ if __name__ == '__main__':
             buygift = Buygift(signal)
             message = buygift.main()
             send("太太乐话费兑换通知",message)
-            i += 1 
+            i += 1
+            time.sleep(6)
 
 
