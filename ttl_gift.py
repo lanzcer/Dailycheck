@@ -199,7 +199,7 @@ class Buygift:
             'Connection': 'keep-alive'
         }
         response = requests.get(url, headers=headers)
-        return json.loads(response.text)['code'], json.loads(response.text)['message']
+        return json.loads(response.text)['message']
 
     def gift62(self,token,user,num):
         url= 'https://www.ttljf.com/ttl_site/chargeApi.do?giftId=62&loginToken=&method=charge&mobile=&sign=&userId='
@@ -216,7 +216,7 @@ class Buygift:
             'Connection': 'keep-alive'
         }
         response = requests.get(url, headers=headers)
-        return json.loads(response.text)['code'], json.loads(response.text)['message']
+        return json.loads(response.text)['message']
 
     def gift633(self,token,user,num):
         url= 'https://www.ttljf.com/ttl_site/chargeApi.do?giftId=633&loginToken=&method=charge&mobile=&sign=&userId='
@@ -233,7 +233,7 @@ class Buygift:
             'Connection': 'keep-alive'
         }
         response = requests.get(url, headers=headers)
-        return json.loads(response.text)['code'], json.loads(response.text)['message']
+        return json.loads(response.text)['message']
 
 
     def gift631(self,token,user,num):
@@ -251,7 +251,7 @@ class Buygift:
             'Connection': 'keep-alive'
         }
         response = requests.get(url, headers=headers)
-        return json.loads(response.text)['code'], json.loads(response.text)['message']
+        return json.loads(response.text)['message']
 
     def main(self):
         nums = []
@@ -267,24 +267,20 @@ class Buygift:
                     print(s)
                     msg_all += s
                 elif self.identify_num(nums[i]) == 1:
-                    code = self.gift633(tokens[i],users[i],nums[i])[0]
                     msg = self.gift633(tokens[i],users[i],nums[i])[1]
                     a = '手机号：'+str(nums[i])+'兑换结果:'+msg_1+'\n'
                     print(a)
                     msg_all += a
                 elif self.identify_num(nums[i]) == 2:
-                    code_1 = self.gift62(tokens[i],users[i],nums[i])[0]
                     msg_1 = self.gift62(tokens[i],users[i],nums[i])[1]
                     b = '手机号：'+str(nums[i])+'兑换结果:'+msg_1+'\n'
                     print(b)
                     msg_all += b
-                    code_2 = self.gift61(tokens[i],users[i],nums[i])[0]
                     msg_2 = self.gift61(tokens[i],users[i],nums[i])[1]                
                     c = '手机号：'+str(nums[i])+'兑换结果:'+msg_2+'\n'
                     print(c)
                     msg_all += c
                 elif self.identify_num(nums[i]) == 3:
-                    code_3 = self.gift631(tokens[i],users[i],nums[i])[0]
                     msg_3 = self.gift631(tokens[i],users[i],nums[i])[1]                  
                     d = '手机号：'+str(nums[i])+'兑换结果:'+msg_3+'\n'
                     print(d)
