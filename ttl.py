@@ -175,8 +175,8 @@ class Ttl:
         giftlist = data.get('gifts')
         for item in giftlist:
             print("=============📣系统通知📣=============")
-            print(item["giftName"]+ "  库存为："+str(item["giftCount"])+ "  所需积分："+str(item["price"]))
-            msg.append(item["giftName"]+ "  库存为："+str(item["giftCount"])+ "  所需积分："+str(item["price"]))
+            print(item["giftName"]+ "  库存为："+str(item["stockAmount"])+ "  所需积分："+str(item["price"]))
+            msg.append(item["giftName"]+ "  库存为："+str(item["stockAmount"])+ "  所需积分："+str(item["price"]))
         return msg
 
     def main(self,tokens):
