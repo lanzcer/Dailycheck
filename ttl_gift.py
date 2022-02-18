@@ -297,8 +297,6 @@ if __name__ == '__main__':
     i = 0
     signal = giftInven()
     if signal == 1:
-        msg = stock()
-        send("太太乐库存通知",msg)
         while i <=3:
             buygift = Buygift(signal)
             message = buygift.main()
