@@ -297,7 +297,7 @@ if __name__ == '__main__':
     i = 0
     signal = giftInven()
     if signal == 1:
-        while i <=3:
+        while i <=5:
             buygift = Buygift(signal)
             message = buygift.main()
             send("太太乐话费兑换通知",message)
