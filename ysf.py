@@ -16,7 +16,7 @@ from urllib3.util import Retry
 
 # 通知服务配置
 BARK = os.getenv("BARK", '')  # bark服务,自行搜索; secrets可填;
-BARK_PUSH = os.getenv("BARK_PUSH", 'https://api.day.app/ra7fgu4whtBQKbqVxeb9Bj')  # bark自建服务器，要填完整链接，结尾的/不要
+BARK_PUSH = os.getenv("BARK_PUSH", '')  # bark自建服务器，要填完整链接，结尾的/不要
 QYWX_AM = os.getenv("QYWX_AM", '')  # 企业微信
 QYWX_KEY = os.getenv("QYWX_KEY", '')
 
@@ -219,7 +219,7 @@ class YSFSIGN:
         endpoint = 'sign'
         body = 'channelId=1&type=1'
         sign_res =  self.send_post_request(endpoint, body,token)
-        if sign_res['code'] == '200':
+        if sign_res['code'] == 200:
             a = f"签到成功，获得一次抽奖机会"
         else:
             a = sign_res['msg']
@@ -230,7 +230,7 @@ class YSFSIGN:
         endpoint = 'doDrawV1'
         body = 'type=1'
         draw_res =  self.send_post_request(endpoint, body,token)
-        if draw_res['code'] == '200':
+        if draw_res['code'] == 200:
             b = f"{draw_res['msg']},获得奖品:{draw_res['data']['name']}"
         else:
             b = f"{draw_res['msg']}"
