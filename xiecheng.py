@@ -169,7 +169,7 @@ def get_token_userid():
         }
     response=requests.get(url=url,headers=headers)
     for i in range(len(json.loads(response.text)['data'])):
-        if json.loads(response.text)['data'][i]['name'] =='ysf':
+        if json.loads(response.text)['data'][i]['name'] =='xiecheng':
             try:
                 env = re.split("&|,|，|\\s",json.loads(response.text)['data'][i]['value'])
                 for item in env:
