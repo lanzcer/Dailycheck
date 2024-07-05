@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+cron: 5 11,19 * * *
+new Env('携程签到');
+"""
+
 import sys
 import os
 import re
