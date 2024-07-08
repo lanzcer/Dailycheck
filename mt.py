@@ -38,9 +38,12 @@ def send_post_request(token, couponid):
 
     body = f'wm_dtype=iPhone%2014%20Pro%3CiPhone15%2C2%3E&wm_dversion=6.6.3&wm_dplatform=iOS&wm_uuid=0000000000000F500E5DA05094FB9B095EC62DD1197ADA170315197635030298&wm_visitid=755719b4-d452-4e16-ad93-c9b7b3051d11&wm_appversion=9.51.6&wm_logintoken={token}&userToken={token}&req_time=1720118368374&waimai_sign=%2F&userid=3428020707&user_id=3428020707&lch=1000&sessionId=DTRLPJ&province=%E6%B1%9F%E8%A5%BF%E7%9C%81&nickName=None&gender=0&country=%E4%B8%AD%E5%9B%BD&city=%E5%8D%97%E6%98%8C&optimusCode=20&riskLevel=71&partner=4&platform=13&uuid=0000000000000F500E5DA05094FB9B095EC62DD1197ADA170315197635030298&open_id=3428020707&rc_app=4&rc_platform=13&mtSecuritySiua=true&mtSecuritySign=true&host_version=8.30.1&fpApp=4&fpPlatform=5&host_ctype=iphone&wm_uuid_source=client&sdkVersion=2.2.6&wxPrint=&wxNickName=None&pageType=1&djEncryptRiskData=true&newUserCoupon=0&tradeSource=33&exchangeCoinNumber=200&exchangeRuleId={couponid}&city_id_level2=360100&city_id_level3=360105&actual_city_id_level2=360100&actual_city_id_level3=360105&app_model=4&rank_list_id=134d941d610e8a1245d7a51976350302&wm_ctype=mtiphone_wmgroup'
 
-    response = requests.post(url, data=body, headers=headers)
-    res = response.json()
-    print(res)
+    for _ in range(4):  # 执行三次请求
+        response = requests.post(url, json=body, headers=headers)
+        response = requests.post(url, data=body, headers=headers)
+        res = response.json()
+        print(res)
+ 
 
 def get_token_userid():
     tokens = []
@@ -64,10 +67,9 @@ def get_token_userid():
             except:
                 pass
     return tokens
-
+    
 def main():
-    #tokens = get_token_userid()
-    tokens = ['AgFwKbEmlQ0sSLacdO-NOjvi1KZITtjRNPd_Ygy498nzF3Bonlk0KUDDtIlqAvapvwYEVlXxI4nVHREAAADvIAAA6zPim4L_vTLZQSw_PHC3nTBsOxv5BndGd2yB-xaPzvZbM2EbdpXuVL7FqeYHUnof22K74-Em05OTCccnEmci1g']
+    tokens = get_token_userid()
     # 获取当前时间
     current_hour = datetime.now().hour
     # 根据当前时间选择couponid
@@ -76,7 +78,7 @@ def main():
     elif 12 <= current_hour < 14:  # 如果当前时间接近14点
         couponid = CouponIdList['Fourteen']
     else:
-        couponid = CouponIdList['Fourteen']  # 其他时间段可以选择默认值或者不赋值
+        couponid = CouponIdList['Ten']  # 其他时间段可以选择默认值或者不赋值
 
     chunk_size = 4  # 每次取出的token数量
     for i in range(0, len(tokens), chunk_size):
@@ -89,11 +91,11 @@ def main():
             thread.start()
 
         # 等待所有线程执行完毕
-
         for thread in threads:
             thread.join()
 
 if __name__ == "__main__":
     main()
+
 
 
