@@ -98,17 +98,28 @@ class ICBC:
         return self.send_request(act_id, referer)
 
 
+    def main(self):
+        msg = ''
+        print("******开始工行刮刮乐,间隔12s******")
+        try:
+            meishi_msg = "【美食刮刮乐】" + self.meishi() + "\n"
+            time.sleep(12)
+            leyuan_msg = "【乐园刮刮乐】" + self.leyuan() + "\n"
+            time.sleep(12)
+            movie_msg = "【电影刮刮乐】" + self.movie() + "\n"
+            time.sleep(12)
+            waimai_msg = "【外卖刮刮乐】" + self.waimai() + "\n"
+            msg = meishi_msg + movie_msg + waimai_msg + leyuan_msg
+        except :
+            msg += "token失效，请更新工行活动token"
+        return msg
+
 cks = get_cookie()
-msg = ''
-print("******开始工行刮刮乐******")
 for ck in cks:
     icbc = ICBC(ck)
-    meishi_msg ="【美食刮刮乐】" + icbc.meishi() + "\n"
-    leyuan_msg ="【乐园刮刮乐】" + icbc.leyuan() + "\n"
-    movie_msg = "【电影刮刮乐】" +icbc.movie() + "\n"
-    waimai_msg ="【外卖刮刮乐】" + icbc.waimai() + "\n"
-msg = meishi_msg +  movie_msg + waimai_msg + leyuan_msg
-send("【工行刮刮乐活动通知】",msg)
+    msg = icbc.main()
+    print(msg)
+    send("【工行刮刮乐活动通知】",msg)
 
 
 
