@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+cron: 6 0,12 * * *
+new Env('邮储种树');
+"""
+
+
 import sys
 import os
 import re
