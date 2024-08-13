@@ -251,7 +251,7 @@ class YSFSIGN:
             self.refresh()
             msg += f"【执行第{i}个账号任务】\n"
             msg += self.sign() + ', '
-            msg += self.draw()
+            msg += self.draw() + '\n'
         print(msg)
         return msg
 
