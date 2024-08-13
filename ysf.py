@@ -200,13 +200,10 @@ class YSFSIGN:
             'Accept': '*/*'
         }
 
-    def send_post_request(self, endpoint, body,token):
+    def send_post_request(self, endpoint, body):
         url = f'{self.base_url}/{endpoint}'
-        headers = self.headers.copy()  # 复制通用头部
-        headers['Authorization'] = f'Bearer {token}'  # 添加Authorization头
-
         try:
-            response = requests.post(url, headers=headers, data=body)
+            response = requests.post(url, headers=self.headers, data=body)
             response.raise_for_status()
             return response.json()  # 返回JSON响应内容
         except requests.exceptions.HTTPError as http_err:
@@ -215,40 +212,52 @@ class YSFSIGN:
             print(f"Other error occurred: {err}")
         return None
 
-    def sign(self,token):
-        endpoint = 'sign'
+    def sign(self):
+        endpoint = 'signV3'
         body = 'channelId=1&type=1'
-        sign_res =  self.send_post_request(endpoint, body,token)
-        if sign_res['code'] == 200:
-            a = f"签到成功，获得一次抽奖机会"
+        sign_res = self.send_post_request(endpoint, body)
+        if sign_res and sign_res.get('code') == 200:
+            return "签到成功，获得一次抽奖机会"
         else:
-            a = sign_res['msg']
-        return a
+            return sign_res.get('msg', '签到失败')
 
-
-    def draw(self,token):
+    def draw(self):
         endpoint = 'doDrawV1'
         body = 'type=1'
-        draw_res =  self.send_post_request(endpoint, body,token)
-        if draw_res['code'] == 200:
-            b = f"{draw_res['msg']},获得奖品:{draw_res['data']['name']}"
+        draw_res = self.send_post_request(endpoint, body)
+        if draw_res and draw_res.get('code') == 200:
+            return f"{draw_res['msg']}, 获得奖品: {draw_res['data']['name']}"
         else:
-            b = f"{draw_res['msg']}"
-        return b
+            return draw_res.get('msg', '抽奖失败')
 
-    def main(self,tokens):
+    def refresh(self):
+        url = "https://upa.jieyou.pro:9192/yhjx/api/mini/addUserLoginRecord"
+        try:
+            response = requests.get(url, headers=self.headers)
+            response.raise_for_status()
+            res = response.json().get('msg', '刷新失败')
+            print(res)
+            return res
+        except requests.exceptions.HTTPError as http_err:
+            print(f"HTTP error occurred: {http_err}")
+        except Exception as err:
+            print(f"Other error occurred: {err}")
+        return None
+
+    def main(self):
         msg = ''
-        i=1
-        for token in tokens:
-            msg += f"【执行第{i}个账号任务】\n" + self.sign(token) + ','
-            msg += self.draw(token) + '\n'
-            i += 1
+        for i, token in enumerate(self.tokens, start=1):
+            self.headers['Authorization'] = f'Bearer {token}'
+            self.refresh()
+            msg += f"【执行第{i}个账号任务】\n"
+            msg += self.sign() + ', '
+            msg += self.draw()
         print(msg)
         return msg
 
 if __name__ == '__main__':
     tokens = get_token_userid()
     ysf = YSFSIGN(tokens)
-    msg = ysf.main(tokens)
-    msg += f"\n时间：{(datetime.now()).strftime('%Y-%m-%d %H:%M:%S')}"
+    msg = ysf.main()
+    msg += f"\n时间：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
     send("云闪付签到通知", msg)
