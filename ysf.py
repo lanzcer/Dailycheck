@@ -42,74 +42,53 @@ def get_token_userid():
 class YSFSIGN:
     def __init__(self, tokens):
         self.tokens = tokens
-        self.base_url = 'https://upa.jieyou.pro:9192/yhjx/api/draw/turntable'
+        self.base_url = 'https://paas-up-uhq-api.inrice.cn/finme-activity-server/api/activity/'
         self.headers = {
             'Connection': 'keep-alive',
             'Accept-Encoding': 'gzip, deflate, br',
-            'saleWay': '1',
             'Content-Type': 'application/x-www-form-urlencoded',
-            'Origin': 'https://mini.jieyou.pro',
-            'User-Agent': ('Mozilla/5.0 (iPhone; CPU iPhone OS 16_3_1 like Mac OS X) AppleWebKit/605.1.15 '
-                           '(KHTML, like Gecko) Mobile/15E148 /sa-sdk-ios/sensors-verify/analytics.95516.com?production '
-                           '(com.unionpay.chsp) (cordova 4.5.4) (updebug 0) (version 1010) (UnionPay/1.0 CloudPay) '
-                           '(clientVersion 310) (language zh_CN) (languageFamily zh_CN) (upApplet single) (walletMode 00)'),
-            'Host': 'upa.jieyou.pro:9192',
-            'Referer': 'https://mini.jieyou.pro/',
-            'Accept-Language': 'zh-CN,zh-Hans;q=0.9',
-            'Accept': '*/*'
+            'appId': '1461820386848097',
+            'Origin': 'https://paas-up-uhq.inrice.cn',
+            'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_2_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 /sa-sdk-ios/sensors-verify/analytics.95516.com?production             (com.unionpay.chsp) (cordova 4.5.4) (updebug 0) (version 1012) (UnionPay/1.0 CloudPay) (clientVersion 312) (language zh_CN) (languageFamily zh_CN) (upApplet single) (walletMode 00) ',
+            'app': 'UHJX',
+            'Host': 'paas-up-uhq-api.inrice.cn',
+            'Referer': 'https://paas-up-uhq.inrice.cn/',
+            'Act-Key': 'ACT20240831132725AK7W',
+            'Accept': '*/*',
+            'Accept-Language': 'zh-CN,zh-Hans;q=0.9'
         }
 
-    def send_post_request(self, endpoint, body):
+    def send_post_request(self, endpoint,actkey):
+        self.headers["Act-Key"] = actkey
         url = f'{self.base_url}/{endpoint}'
-        try:
-            response = requests.post(url, headers=self.headers, data=body)
-            response.raise_for_status()
-            return response.json()  # 返回JSON响应内容
-        except requests.exceptions.HTTPError as http_err:
-            print(f"HTTP error occurred: {http_err}")
-        except Exception as err:
-            print(f"Other error occurred: {err}")
-        return None
+        response = requests.post(url, headers=self.headers)
+        return response
 
     def sign(self):
-        endpoint = 'signV3'
-        body = 'channelId=1&type=1'
-        sign_res = self.send_post_request(endpoint, body)
-        if sign_res and sign_res.get('code') == 200:
+        endpoint = 'sign-in'
+        act_key = 'ACT20240831132725AK7W'
+        sign_res = self.send_post_request(endpoint,act_key)
+        if sign_res.status_code == 200:
             return "签到成功，获得一次抽奖机会"
         else:
-            return sign_res.get('msg', '签到失败')
+            return sign_res.json().get('message', '签到失败')
 
     def draw(self):
-        endpoint = 'doDrawV1'
-        body = 'type=1'
-        draw_res = self.send_post_request(endpoint, body)
-        if draw_res and draw_res.get('code') == 200:
-            return f"{draw_res['msg']}, 获得奖品: {draw_res['data']['name']}"
+        endpoint = 'lottery/participate'
+        act_key = 'ACT20240831170440UJJ2'
+        draw_res = self.send_post_request(endpoint,act_key)
+        if draw_res.status_code == 200:
+            return f"抽奖成功, 获得奖品: {draw_res.json()['prizeName']}"
         else:
-            return draw_res.get('msg', '抽奖失败')
+            return draw_res.json().get('message')
 
-    def refresh(self):
-        url = "https://upa.jieyou.pro:9192/yhjx/api/mini/addUserLoginRecord"
-        try:
-            response = requests.get(url, headers=self.headers)
-            response.raise_for_status()
-            res = response.json().get('msg', '刷新失败')
-            print(res)
-            return res
-        except requests.exceptions.HTTPError as http_err:
-            print(f"HTTP error occurred: {http_err}")
-        except Exception as err:
-            print(f"Other error occurred: {err}")
-        return None
 
     def main(self):
         msg = ''
         for i, token in enumerate(self.tokens, start=1):
             self.headers['Authorization'] = f'Bearer {token}'
-            self.refresh()
             msg += f"【执行第{i}个账号任务】\n"
-            msg += self.sign() + ', '
+            msg += self.sign()
             msg += self.draw() + '\n'
         print(msg)
         return msg
