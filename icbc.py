@@ -66,7 +66,6 @@ class ICBC:
             response = requests.post(self.base_url, headers=self.headers, data=body)
             response.raise_for_status()  # Raise an error for bad status codes
             response_data = response.json()
-
             if response_data['data']['returnCode'] == 0:
                 goods_simple_name = response_data['data']['data']['goodsSimpleName']
             else:
@@ -77,39 +76,52 @@ class ICBC:
             return None
 
     def meishi(self):
-        act_id = "LOT20240704110448217361"
-        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20240704110448217361&isApp=1"
+        act_id = "LOT20241030084542687155"
+        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20241030084542687155&isApp=1"
         return self.send_request(act_id, referer)
 
     def leyuan(self):
-        act_id = "LOT20240705173257740560"
-        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20240705173257740560&isApp=1"
+        act_id = "LOT20241031180517775971"
+        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20241031093208130170&isApp=1"
         return self.send_request(act_id, referer)
 
 
     def movie(self):
-        act_id = "LOT20240704161813807808"
-        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20240704161813807808&isApp=1"
+        act_id = "LPARK20250122145738360581"
+        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LPARK20250122145738360581&isApp=1"
         return self.send_request(act_id, referer)
 
     def waimai(self):
-        act_id = "LOT20240704111656186386"
-        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20240704111656186386&isApp=1"
+        act_id = "LOT20250225142405675273"
+        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LOT20250225142405675273&isApp=1"
         return self.send_request(act_id, referer)
 
+    def market(self):
+        act_id = "LPARK20240628090153620720"
+        referer = "https://chp.icbc.com.cn/bmcs/lottery/?corpId=2000000882&actId=LPARK20240628090153620720&isApp=1"
+        return self.send_request(act_id, referer)
 
     def main(self):
         msg = ''
-        print("******开始工行刮刮乐,间隔12s******")
+        print("******开始工行刮刮乐,间隔4s******")
         try:
+            """self.meishi()
+            time.sleep(2)
             meishi_msg = "【美食刮刮乐】" + self.meishi() + "\n"
-            time.sleep(12)
+            time.sleep(2)
+            self.leyuan()
+            time.sleep(2)
             leyuan_msg = "【乐园刮刮乐】" + self.leyuan() + "\n"
-            time.sleep(12)
+            time.sleep(2)
+            self.movie()
+            time.sleep(2)
             movie_msg = "【电影刮刮乐】" + self.movie() + "\n"
-            time.sleep(12)
+            time.sleep(2)"""
+            self.waimai()
+            time.sleep(2)
             waimai_msg = "【外卖刮刮乐】" + self.waimai() + "\n"
-            msg = meishi_msg + movie_msg + waimai_msg + leyuan_msg
+            #msg =meishi_msg + movie_msg + waimai_msg + leyuan_msg
+            msg = waimai_msg
         except :
             msg += "token失效，请更新工行活动token"
         return msg
